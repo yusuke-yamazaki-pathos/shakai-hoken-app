@@ -8,6 +8,7 @@ import { LoginCheckComponent } from './login-check/login-check.component';
 import { OutputPageComponent } from './output-page/output-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { EmployeePageComponent } from './employee-page/employee-page.component';
+import { EmployeeEditComponent } from './employee-edit/employee-edit.component';
 
 
 export const routes: Routes = [
@@ -54,6 +55,11 @@ export const routes: Routes = [
     {
         path: 'employee-page',
         component: EmployeePageComponent
+    },
+
+    {
+        path: 'employee-edit',
+        component: EmployeeEditComponent
     }
 
 

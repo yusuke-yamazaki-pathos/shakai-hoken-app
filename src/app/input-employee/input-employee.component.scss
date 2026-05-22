@@ -1,0 +1,284 @@
+// カラー変数（他の画面とトーンを合わせています）
+$primary-color: #3f51b5;       // メインの紺色
+$primary-hover: #303f9f;       // ボタンホバー色
+$text-color: #333333;          // 文字色
+$bg-color: #f5f7fa;            // 全体背景の薄いグレー
+$card-bg: #ffffff;             // フォームやカードの白
+$border-color: #e0e0e0;        // 線や枠線の薄いグレー
+$input-border: #cccccc;        // 入力欄の枠線
+$help-text-color: #666666;     // 補足説明の文字色
+$accent-bg: #f9f9fb;           // 扶養エリアなどの背景
+
+.form-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background-color: $card-bg;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: $text-color;
+
+  h2 {
+    font-size: 1.6rem;
+    color: $primary-color;
+    border-bottom: 2px solid $primary-color;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+
+  // 入力項目のグループ共通スタイル
+  .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #444444;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid $input-border;
+      border-radius: 6px;
+      background-color: #fafafa;
+      box-sizing: border-box;
+      color: $text-color;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+      }
+    }
+
+    // 扶養人数用の単位（人）の位置微調整
+    .unit {
+      position: absolute;
+      right: 1rem;
+      top: 2.3rem;
+      font-weight: bold;
+      color: #666666;
+    }
+
+    .help-text {
+      font-size: 0.8rem;
+      color: $help-text-color;
+      margin: 0.4rem 0 0 0;
+    }
+  }
+
+  // 扶養家族の詳細入力エリア
+  .family-details-container {
+    background-color: $accent-bg;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    border: 1px solid $border-color;
+
+    h3 {
+      font-size: 1.1rem;
+      color: $primary-color;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    // ループする扶養家族の1ボックス
+    .dependent-box {
+      background-color: #ffffff;
+      padding: 1.2rem;
+      border-radius: 6px;
+      border: 1px solid $border-color;
+      border-left: 4px solid $primary-color;
+      margin-bottom: 1.2rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h4 {
+        font-size: 0.95rem;
+        color: #333333;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        background-color: #f0f2f5;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        display: inline-block;
+      }
+
+      // ボックス内の入力欄は少しコンパクトにする
+      .form-group {
+        margin-bottom: 1rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        input, select {
+          padding: 0.6rem 0.8rem;
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+
+  // 保存ボタン
+  .subit-btn {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: $primary-color;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 2px 6px rgba(63, 81, 181, 0.2);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // 社員一覧セクション
+  .list-employees {
+    h3 {
+      font-size: 1.3rem;
+      color: #333333;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1.2rem;
+        background-color: $primary-color;
+        margin-right: 0.5rem;
+        border-radius: 2px;
+      }
+    }
+
+    // テーブルのデザイン
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+
+      thead {
+        tr {
+          background-color: #f0f2f5;
+          border-top: 2px solid $border-color;
+          border-bottom: 2px solid $border-color;
+        }
+        th {
+          padding: 1rem 0.75rem;
+          font-weight: 600;
+          color: #555555;
+          text-align: left;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid $border-color;
+          transition: background-color 0.15s ease;
+
+          &:hover {
+            background-color: #fafdff; // マウスホバーでわずかに青く光る
+          }
+
+          &:last-child {
+            border-bottom: 2px solid $border-color;
+          }
+        }
+
+        td {
+          padding: 1rem 0.75rem;
+          color: #333333;
+          vertical-align: middle;
+        }
+
+        .name-text { font-weight: 600; }
+        .age-text { color: #555555; }
+        .status-text {
+          font-size: 0.85rem;
+          font-weight: 600;
+          display: inline-block;
+          padding: 0.2rem 0.6rem;
+          background-color: #e8eaf6;
+          color: $primary-color;
+          border-radius: 4px;
+        }
+
+        .empty-text {
+          text-align: center;
+          color: #999999;
+          font-style: italic;
+          padding: 2rem 0;
+        }
+      }
+    }
+  }
+}
+
+// 枠外の下部にある「会社登録」ボタンの装飾
+button[routerLink="/generate-company"] {
+  display: block;
+  max-width: 200px;
+  margin: 0 auto 3rem auto;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: transparent;
+  color: $primary-color;
+  border: 1px solid $primary-color;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(63, 81, 181, 0.05);
+    border-color: $primary-hover;
+    color: $primary-hover;
+  }
+}
+
+// スマホ用のレスポンシブ対応
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1.5rem;
+    margin: 1rem;
+
+    .list-employees {
+      overflow-x: auto; // 横スクロールを可能にする
+      
+      table {
+        min-width: 600px; // テーブルが潰れすぎないように最低幅を設定
+      }
+    }
+  }
+}

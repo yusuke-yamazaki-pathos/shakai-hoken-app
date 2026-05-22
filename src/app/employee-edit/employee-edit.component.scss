@@ -1,0 +1,165 @@
+$primary-color: #3f51b5;
+$primary-hover: #303f9f;
+$card-bg: #ffffff;
+$border-color: #e0e0e0;
+$input-border: #cccccc;
+
+.edit-dialog-content {
+  max-height: 70vh; // 縦長になったときにポップアップ内でスクロールさせる
+  overflow-y: auto;
+  background-color: #f5f7fa; // 統一感を出すため背景を少しグレーに
+  padding: 1.5rem !important;
+
+  .employee-profile-edit {
+    max-width: 100%;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  // カード型の区切りデザイン（表示画面と統一）
+  .profile-section {
+    background-color: $card-bg;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1.2rem;
+        background-color: $primary-color;
+        margin-right: 0.5rem;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  // テーブルおよび入力フォームのスタイル
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    tr {
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    th, td {
+      padding: 0.6rem 0.5rem;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      width: 35%;
+      color: #666;
+      font-weight: 600;
+      background-color: #fafafa;
+      padding-left: 1rem;
+    }
+
+    td {
+      width: 65%;
+      padding-left: 1rem;
+    }
+
+    // テーブル内の入力欄をスマートにフィットさせる
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.95rem;
+      border: 1px solid $input-border;
+      border-radius: 6px;
+      background-color: #ffffff;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+      }
+    }
+    
+    select {
+      cursor: pointer;
+    }
+  }
+}
+
+// 下部のボタンエリア
+.edit-dialog-actions {
+  padding: 1rem 1.5rem !important;
+  border-top: 1px solid #eeeeee;
+  background-color: #ffffff;
+
+  button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cancel-btn {
+    background: transparent;
+    border: 1px solid #999999;
+    color: #555555;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .save-btn {
+    background-color: $primary-color;
+    border: none;
+    color: #ffffff;
+    margin-left: 0.75rem;
+
+    &:hover {
+      background-color: $primary-hover;
+      box-shadow: 0 2px 6px rgba(63, 81, 181, 0.3);
+    }
+  }
+}
+
+// スマホ用のレスポンシブ対応
+@media (max-width: 600px) {
+  table {
+    tr {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 0;
+    }
+    th, td {
+      width: 100%;
+      padding: 0.2rem 0.5rem;
+    }
+    th {
+      background-color: transparent;
+      color: $primary-color;
+      font-size: 0.9rem;
+    }
+  }
+}

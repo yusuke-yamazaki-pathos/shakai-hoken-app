@@ -1,1 +1,63 @@
-<p>employee-page works!</p>
+@if (userData) {
+    <div class="employee-profile">
+      <div class="profile-header">
+        <h1>従業員プロフィール</h1>
+        <!-- 💡 ボタンをデータがある位置へ移動し、タイポを修正しました -->
+        <button class="subit-btn" (click)="openEditDialog()">編集</button>
+      </div>
+  
+      <!-- 基本情報 -->
+      <section class="profile-section">
+        <h2>基本情報</h2>
+        <table>
+          <tr><th>社員ID</th><td>{{ userData.id ?? '未割り当て' }}</td></tr>
+          <tr><th>氏名</th><td>{{ userData.name }}</td></tr>
+          <tr><th>性別</th><td>{{ userData.gender }}</td></tr>
+          <tr><th>年齢</th><td>{{ userData.age }} 歳</td></tr>
+          <tr><th>住所</th><td>{{ userData.address }}</td></tr>
+        </table>
+      </section>
+  
+      <!-- 勤務・給与・健康情報 -->
+      <section class="profile-section">
+        <h2>勤務・ステータス情報</h2>
+        <table>
+          <tr><th>ステータス</th><td>{{ userData.status }}</td></tr>
+          <tr><th>入社日</th><td>{{ userData.startDate }}</td></tr>
+          <tr><th>標準報酬月額</th><td>{{ userData.monthAvg }}</td></tr>
+          <tr><th>健康保険加入状況</th><td>{{ userData.helthStatus }}</td></tr>
+          <tr><th>厚生年金加入状況</th><td>{{ userData.employeePension }}</td></tr>
+        </table>
+      </section>
+  
+      <!-- 扶養情報 -->
+      <section class="profile-section">
+        <h2>扶養情報</h2>
+        <p>扶養人数：{{ userData.dependentCount }} 人</p>
+  
+        <h3>扶養家族一覧</h3>
+        @if (userData.dependents && userData.dependents.length > 0) {
+          <ul>
+            @for (dep of userData.dependents; track $index) {
+              <li>{{ dep.name }} ({{ dep.relationship }})</li>
+            }
+          </ul>
+        } @else {
+          <p class="no-data">扶養家族の登録はありません。</p>
+        }
+      </section>
+  
+      <!-- セキュリティ（デバッグ用・本番は隠してください） -->
+      <section class="profile-section security-info">
+        <h2>セキュリティ</h2>
+        <p>パスワード: {{ userData.pass }}</p>
+      </section>
+  
+    </div>
+  } @else {
+    <!-- 読み込み中の表示 -->
+    <div class="loading-container">
+      <p>従業員データを読み込んでいます...</p>
+    </div>
+  }
+  

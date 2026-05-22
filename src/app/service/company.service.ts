@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, getDoc, query, where, getDocs, updateDoc } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -8,7 +8,7 @@ import { Firestore, collection, addDoc, doc, getDoc } from '@angular/fire/firest
 export class CompanyService {
 
   private firestore : Firestore = inject(Firestore);
-  companyId = localStorage.getItem('current_company_id');
+ 
 
 
   async saveCompany(companyData: any): Promise<any>{
@@ -56,5 +56,26 @@ export class CompanyService {
       };
       return companyData;
     }
+  }
+
+  async updateUserData(companyId: string, userId: string, updatedUserData: any){
+
+   const employeeCollection = collection(this.firestore, `company`, companyId, `employees`);
+
+   const q = query(
+    employeeCollection,
+    where('id', '==', userId)
+   );
+
+   const userSnap = await getDocs(q);
+
+   if(!userSnap.empty){
+
+    const docRef = userSnap.docs[0].ref;
+
+    await updateDoc(docRef,updatedUserData );
+    
+   }
+
   }
 }

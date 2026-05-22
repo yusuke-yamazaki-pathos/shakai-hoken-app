@@ -79,4 +79,25 @@ export class LoginService {
       return false;
     }
   }
+
+  async getUserData(companyId: string, userId: string): Promise<any>{
+
+    const userRef = collection(this.firestore, `company`, companyId, `employees`);
+
+    const q = query(
+      userRef,
+      where('id', '==', userId),
+    );
+
+    const userSnap = await getDocs(q);
+
+    if(!userSnap.empty){
+      return userSnap.docs[0].data();
+    }
+    else{
+      console.log('ユーザーが見つかりません')
+      return null;
+    }
+
+  }
 }

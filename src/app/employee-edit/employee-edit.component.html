@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>従業員情報の編集</h2>
+
+<mat-dialog-content class="edit-dialog-content">
+  <div class="employee-profile-edit">
+
+    <!-- 基本情報 -->
+    <section class="profile-section">
+      <h2>基本情報</h2>
+      <table>
+        <tr>
+          <th>氏名</th>
+          <td><input type="text" [(ngModel)]="editUser.name" placeholder="氏名を入力"></td>
+        </tr>
+        <tr>
+          <th>性別</th>
+          <td>
+            <select [(ngModel)]="editUser.gender">
+              <option value="男性">男性</option>
+              <option value="女性">女性</option>
+              <option value="その他">その他</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>年齢</th>
+          <td><input type="number" [(ngModel)]="editUser.age" placeholder="年齢を入力"></td>
+        </tr>
+        <tr>
+          <th>住所</th>
+          <td><input type="text" [(ngModel)]="editUser.address" placeholder="住所を入力"></td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 勤務・給料・健康情報 -->
+    <section class="profile-section">
+      <h2>勤務・ステータス情報</h2>
+      <table>
+        <tr>
+          <th>ステータス</th>
+          <td>
+            <select [(ngModel)]="editUser.status">
+              <option value="在籍">在籍</option>
+              <option value="休職">休職</option>
+              <option value="退職">退職</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>入社日</th>
+          <td><input type="date" [(ngModel)]="editUser.startDate"></td>
+        </tr>
+        <tr>
+          <th>月平均（稼働/給与）</th>
+          <td><input type="number" [(ngModel)]="editUser.monthAvg" placeholder="金額や時間を入力"></td>
+        </tr>
+        <tr>
+          <th>健康状態</th>
+          <td><input type="text" [(ngModel)]="editUser.helthStatus" placeholder="健康状態を入力"></td>
+        </tr>
+        <tr>
+          <th>厚生年金番号/区分</th>
+          <td><input type="text" [(ngModel)]="editUser.employeePension" placeholder="加入"></td>
+        </tr>
+      </table>
+    </section>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="edit-dialog-actions">
+  <button class="cancel-btn" (click)="onCancel()">キャンセル</button>
+  <button class="save-btn" (click)="onSave()">変更を保存</button>
+</mat-dialog-actions>

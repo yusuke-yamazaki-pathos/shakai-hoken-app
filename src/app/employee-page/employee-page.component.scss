@@ -1,0 +1,228 @@
+// カラー変数（お好みに合わせて変更してください）
+$primary-color: #3f51b5;     // メインの紺色
+$primary-hover: #303f9f;     // ボタンのホバー色
+$text-color: #333333;        // 文字色
+$bg-color: #f5f7fa;          // 背景の薄いグレー
+$card-bg: #ffffff;           // カードの白
+$border-color: #e0e0e0;      // 線のグレー
+$loading-text: #666666;
+
+.employee-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: $text-color;
+
+  // タイトルと編集ボタンを綺麗に横並びにするためのヘッダー枠
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid $primary-color;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0;
+      color: $primary-color;
+      border: none; // 重複線をリセット
+      padding: 0;
+    }
+
+    // 💡 編集ボタンのスタイルを新規追加
+    .subit-btn {
+      background-color: $primary-color;
+      color: #ffffff;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(63, 81, 181, 0.2);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: $primary-hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  // 各ブロック（基本情報、勤務情報など）のカードデザイン
+  .profile-section {
+    background-color: $card-bg;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 1.2rem;
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 1.2rem;
+        background-color: $primary-color;
+        margin-right: 0.5rem;
+        border-radius: 2px;
+      }
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+      color: #555;
+    }
+  }
+
+  // テーブル（情報表示）のスタイル
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    tr {
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    th, td {
+      padding: 0.8rem 0.5rem;
+      text-align: left;
+    }
+
+    th {
+      width: 30%;
+      color: #666;
+      font-weight: 600;
+      background-color: #fafafa;
+      padding-left: 1rem;
+    }
+
+    td {
+      width: 70%;
+      padding-left: 1rem;
+    }
+  }
+
+  // 扶養家族のリスト
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.6rem 1rem;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      border-left: 3px solid #ccc;
+    }
+  }
+
+  .no-data {
+    color: #999;
+    font-style: italic;
+  }
+
+  // セキュリティ（デバッグ）情報の特別枠
+  .security-info {
+    background-color: #fff5f5;
+    border: 1px dashed #ffcdd2;
+
+    h2 {
+      color: #c62828;
+      &::before { background-color: #c62828; }
+    }
+    p {
+      font-family: monospace;
+      color: #b71c1c;
+    }
+  }
+}
+
+// 読み込み中画面のスタイル
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+
+  p {
+    font-size: 1.1rem;
+    color: $loading-text;
+    position: relative;
+    padding-left: 2rem;
+
+    // 簡易的なローディングアニメーション（ぐるぐる）
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid $border-color;
+      border-top: 2px solid $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+// スマホ用のレスポンシブ対応
+@media (max-width: 600px) {
+  .employee-profile {
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      
+      .subit-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    table {
+      tr {
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 0;
+      }
+      th, td {
+        width: 100%;
+        padding: 0.2rem 0.5rem;
+      }
+      th {
+        background-color: transparent;
+        color: $primary-color;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

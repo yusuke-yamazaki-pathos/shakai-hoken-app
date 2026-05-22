@@ -1,0 +1,107 @@
+// カラー変数（プロフィール画面と統一感を持たせています）
+$primary-color: #3f51b5;       // メインの紺色
+$primary-hover: #303f9f;       // ボタンホバー時の濃い紺色
+$text-color: #333333;          // 文字色
+$bg-color: #f5f7fa;            // 背景の薄いグレー
+$card-bg: #ffffff;             // フォームの白
+$border-color: #cccccc;        // 枠線のグレー
+$border-focus: #3f51b5;        // 入力中（フォーカス時）の枠線
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: $bg-color;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.login-container {
+  background-color: $card-bg;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+
+  // 各入力項目のグループ
+  .login-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555555;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      background-color: #fafafa;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $border-focus;
+        background-color: $card-bg;
+        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+      }
+
+      &::placeholder {
+        color: #bbbbbb;
+      }
+    }
+  }
+
+  // ボタン全体の共通設定
+  button {
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  // 認証ボタン（メイン）
+  .subit-btn {
+    background-color: $primary-color;
+    color: #ffffff;
+    border: none;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(63, 81, 181, 0.2);
+
+    &:hover {
+      background-color: $primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // 組織作成ボタン（サブ・枠線デザイン）
+  button[routerLink="/generate-company"] {
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.05);
+      border-color: $primary-hover;
+      color: $primary-hover;
+    }
+  }
+}
