@@ -1,0 +1,14 @@
+<div class="login-container">
+    <div class="login-group">
+        <label>契約ID</label>
+        <input type="text" [(ngModel)]="inputId" placeholder="ABC111">
+    </div>
+    <div class="login-group">
+        <label>契約パスワード</label>
+        <input type="text" [(ngModel)]="inputPass" placeholder="ABC222">
+    </div>
+
+    <button class="subit-btn" (click)="checkforms()">認証</button>
+
+    <button routerLink = "/generate-company">組織作成</button>
+</div>

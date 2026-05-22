@@ -1,0 +1,27 @@
+<div class="loguin-user-containar">
+    <div class="login-u-group">
+        <select  [(ngModel)]="selectCompany" name="compnaySelect">
+            <option value="">--組織を選択してください--</option>
+            @for(company of companyNames; track company.id){
+                <option [value]="company.id">{{company.name}}</option>
+            }
+        </select>
+    </div>
+
+    <div class="login-u-group">
+        <label>ID</label>
+        <input type="text" [(ngModel)]="inputUserId" placeholder="IDを入力してください">
+    </div>
+
+    <div class="login-u-group">
+        <label>パスワード</label>
+        <input type="text" [(ngModel)]="inputUserPass" placeholder="パスワードを入力してください">
+    </div>
+
+    <button class="subit-btn" (click)="checkUser()">ログイン</button>
+
+
+
+</div>
+
+

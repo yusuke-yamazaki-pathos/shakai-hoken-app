@@ -1,0 +1,154 @@
+// カラー変数（好みに応じて変更してください）
+$primary-color: #2b6cb0;    // メインの青
+$primary-hover: #1a4373;    // ボタンホバー時
+$bg-color: #f7fafc;         // 画面全体の背景
+$card-bg: #ffffff;          // フォームの背景
+$border-color: #e2e8f0;     // 線の色
+$text-color: #2d3748;       // 文字の色
+$sub-bg: #edf2f7;           // 組合健保エリアの薄いグレー背景
+
+.form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: $card-bg;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    color: $text-color;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid $primary-color;
+        color: $primary-color;
+        font-size: 24px;
+    }
+
+    // 各入力行の共通設定
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        // 入力欄とドロップダウンの統一スタイル
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100px;
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 1px solid $border-color;
+            border-radius: 6px;
+            background-color: #fff;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-color;
+                box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+            }
+        }
+
+        // 会社名と所在地だけは横幅いっぱい（100%）に広げる
+        input[type="text"],
+        select {
+            width: 100%;
+        }
+
+        // 単位（%、万円、円、級）が横に並ぶスタイル
+        input[type="number"] {
+            display: inline-block;
+            width: calc(100% - 45px); // 単位の幅を引いたサイズ
+            text-align: right;        // 金額や数値は見やすく右寄せに
+        }
+
+        .unit {
+            display: inline-block;
+            width: 35px;
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #718096;
+        }
+    }
+
+    // 💡 組合健保を選んだ時にガバッと出るエリアのデザイン
+    .kumiai-sub-fields {
+        margin-top: 15px;
+        padding: 20px;
+        background-color: $sub-bg; // 薄いグレー背景で「枠」を意識させる
+        border-radius: 8px;
+        border-left: 4px solid $primary-color; // アクセントの左線
+        
+        // ネスト（階層化）を利用した子要素の指定
+        .form-group {
+            margin-bottom: 16px;
+            
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    // 💡 特例退職と家族割のさらに内側のエリア
+    .special-retire-fields,
+    .family-discount-group {
+        margin-top: 12px;
+        padding: 12px;
+        background-color: #ffffff;
+        border-radius: 6px;
+        border: 1px dashed $border-color;
+        
+        .form-group {
+            margin-bottom: 0; // 内側は余白をゼロにしてすっきり見せる
+        }
+    }
+}
+
+// 🔘 保存ボタンと従業員登録ボタンの横並びスタイル
+.subit-btn,
+button[routerLink="/login-check"] {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    margin: 15px auto;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+// 保存ボタン（メインアクション）
+.subit-btn {
+    background-color: $primary-color;
+    color: #ffffff;
+
+    &:hover {
+        background-color: $primary-hover;
+    }
+}
+
+// 戻るボタン（サブアクション・リンク用）
+button[routerLink="/login-check"] {
+    background-color: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    text-decoration: none;
+
+    &:hover {
+        background-color: rgba(43, 108, 176, 0.05);
+    }
+}

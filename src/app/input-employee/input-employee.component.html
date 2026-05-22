@@ -1,0 +1,174 @@
+<div class="form-container">
+    <h2>
+      社員登録フォーム
+    </h2>
+  
+    <div class="form-group">
+      <label>名前:</label>
+      <input type="text"[(ngModel)]="inputName" placeholder="山田太郎">
+    </div>
+
+    <div class="form-group">
+        <label>生年月日</label>
+        <input type="date" [(ngModel)]="inputBirthDay" placeholder="1999-08-16">
+    </div>
+  
+    <div class="form-group">
+      <label>年齢:</label>
+      <input type="number"[(ngModel)]="inputAge" placeholder="30">
+    </div>
+  
+    <div class="form-group">
+      <label>標準報酬月額:</label>
+      <input type="number"[(ngModel)]="inputMonthAvg" placeholder="30">
+    </div>
+  
+    <div class="form-group">
+      <label>勤務状況:</label>
+      <select [(ngModel)]="inputStatus">
+        <option value="在籍">在籍</option>
+        <option value="休職">休職</option>
+        <option value="退職">退職</option>
+        <option value="育休・産休">育休・産休</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label>社員番号:</label>
+      <input type="text"[(ngModel)]="inputId" placeholder="10141">
+    </div>
+  
+    <div class="form-group">
+      <label>入社日:</label>
+      <input type="date"[(ngModel)]="inputStartDate" placeholder="2025-04-01">
+    </div>
+
+    <div class="form-group">
+        <label>性別</label>
+        <select [(ngModel)]="inputGender">
+            <option value="男性">男性</option>
+            <option value="女性">女性</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>雇用形態</label>
+        <select [(ngModel)]="inputEmploymentType">
+            <option value="正社員">正社員</option>
+            <option value="契約社員">契約社員</option>
+            <option value="パート・アルバイト">パート・アルバイト</option>
+            <option value="役員">役員</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>住所</label>
+        <input type="text" [(ngModel)]="inputAddress" placeholder="東京都東京市1-1-1 東京マンション101号">
+    </div>
+
+    <div class="form-group">
+        <label>健康保険加入状況</label>
+        <select [(ngModel)]="helthInsuranceStatus">
+            <option [ngValue]="0">自社で加入</option>
+            <option [ngValue]="1">未加入・対象外</option>
+            <option [ngValue]="2">他社で加入中</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>厚生年金加入状況</label>
+        <select [(ngModel)]="employeesPension">
+            <option [ngValue]="0">自社で加入</option>
+            <option [ngValue]="1">未加入・対象外</option>
+            <option [ngValue]="2">他社で加入中</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>扶養人数</label>
+        <input type="number" [(ngModel)]="dependentCount" (ngModelChange)="onDependentCountChange()" placeholder="2">
+        <span class="unit">人</span>
+        <p class="help-text">※本人は含めず、養っている家族のみ入力。いない場合は0</p>
+
+        @if(dependentCount && dependentCount >= 1){
+
+            <div class="family-details-container">
+
+                <h3>扶養家族の詳細を入力してください</h3>
+
+                @for(dep of dependents; track $index){
+
+                    <div class="dependent-box">
+                        <h4>扶養家族 #{{$index + 1}}</h4>
+
+                        <div class="form-group">
+                            <label>氏名</label>
+                            <input type="text" [(ngModel)]="dep.name" placeholder="山田花子">
+                        </div>
+
+                        <div class="form-group">
+                            <label>生年月日</label>
+                            <input type="date" [(ngModel)]="dep.birthDate" placeholder="1999-08-16">
+                        </div>
+
+                        <div class="form-group">
+                            <label>性別</label>
+                            <select [(ngModel)]="dep.gender">
+                                <option value="男性">男性</option>
+                                <option value="女性">女性</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>続柄</label>
+                            <select [(ngModel)]="dep.relationship">
+                                <option value="配偶者">配偶者</option>
+                                <option value="子">子</option>
+                                <option value="父母">父母</option>
+                                <option value="兄弟姉妹">兄弟姉妹</option>
+                                <option value="その他">その他</option>
+                            </select>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+
+    <button class="subit-btn" (click)="save()">
+      保存
+    </button>
+  
+    <div class="list-employees">
+      <h3>社員一覧</h3>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>標準報酬月額</th>
+            <th>勤務状況</th>
+            <th>入社日</th>
+            <th>社員番号</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of employees$ | async as employeesList">
+            <td class="name-text">{{ emp?.name }}</td>
+            <td class="age-text">{{ emp?.age }}歳</td>
+            <td class="month-avg-text">{{ emp?.monthAvg }}</td>
+            <td class="status-text">{{ emp?.status }}</td>
+            <td class="start-dat-text">{{ emp?.startDate | date:'yyyy/MM/dd'}}</td>
+            <td class="num-text">{{ emp?.id }}</td>
+          </tr>
+          <tr *ngIf="!(employees$ | async)?.length">
+            <td colspan="3" class="empty-text">社員が登録されていません</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <button routerLink="/generate-company">会社登録</button>

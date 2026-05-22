@@ -1,0 +1,162 @@
+<div class="form-container">
+    <h2>会社登録</h2>
+
+    <div class="form-group">
+        <label>会社名</label>
+        <input type="text"[(ngModel)]="inputComName" placeholder="株式会社○○">
+    </div>
+
+
+    <div class="form-group">
+        <label>所在地</label>
+        <select [(ngModel)]="inputComAdd">
+            <option value="北海道">北海道</option>
+            <option value="青森県">青森県</option>
+            <option value="岩手県">岩手県</option>
+            <option value="宮城県">宮城県</option>
+            <option value="秋田県">秋田県</option>
+            <option value="山形県">山形県</option>
+            <option value="福島県">福島県</option>
+            <option value="茨城県">茨城県</option>
+            <option value="栃木県">栃木県</option>
+            <option value="群馬県">群馬県</option>
+            <option value="埼玉県">埼玉県</option>
+            <option value="千葉県">千葉県</option>
+            <option value="東京都">東京都</option>
+            <option value="神奈川県">神奈川県</option>
+            <option value="新潟県">新潟県</option>
+            <option value="富山県">富山県</option>
+            <option value="石川県">石川県</option>
+            <option value="福井県">福井県</option>
+            <option value="山梨県">山梨県</option>
+            <option value="長野県">長野県</option>
+            <option value="岐阜県">岐阜県</option>
+            <option value="静岡県">静岡県</option>
+            <option value="愛知県">愛知県</option>
+            <option value="三重県">三重県</option>
+            <option value="滋賀県">滋賀県</option>
+            <option value="京都府">京都府</option>
+            <option value="大阪府">大阪府</option>
+            <option value="兵庫県">兵庫県</option>
+            <option value="奈良県">奈良県</option>
+            <option value="和歌山県">和歌山県</option>
+            <option value="鳥取県">鳥取県</option>
+            <option value="島根県">島根県</option>
+            <option value="岡山県">岡山県</option>
+            <option value="広島県">広島県</option>
+            <option value="山口県">山口県</option>
+            <option value="徳島県">徳島県</option>
+            <option value="香川県">香川県</option>
+            <option value="愛媛県">愛媛県</option>
+            <option value="高知県">高知県</option>
+            <option value="福岡県">福岡県</option>
+            <option value="佐賀県">佐賀県</option>
+            <option value="長崎県">長崎県</option>
+            <option value="熊本県">熊本県</option>
+            <option value="大分県">大分県</option>
+            <option value="宮崎県">宮崎県</option>
+            <option value="鹿児島県">鹿児島県</option>
+            <option value="沖縄県">沖縄県</option>
+        </select>
+    </div>
+
+    <div  class="form-group">
+        <label>特定適用事業所の区分</label>
+        <select [(ngModel)]="isSpecifiedCompany">
+            <option [ngValue]="false">該当しない</option>
+            <option [ngValue]="true">該当する</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>給与支払方法</label>
+        <select [(ngModel)]="selectSarary">
+            <option value="翌月払い">翌月払い</option>
+            <option value="当月払い">当月払い</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>徴収方法</label>
+        <select [(ngModel)]="selectCollect">
+            <option value="翌月徴収">翌月徴収</option>
+            <option value="当月徴収">当月徴収</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>健康保険</label>
+        <select [(ngModel)]="inputComHelthInsurance">
+            <option value="協会けんぽ">協会けんぽ</option>
+            <option value="組合健保">組合健保</option>
+        </select>
+
+        @if (inputComHelthInsurance === '組合健保'){
+            <div class="kumiai-sub-fields">
+
+                <div class="form-group">
+                    <label>健康保険会社負担割合:</label>
+                    <input type="number"[(ngModel)]="inputComRate" placeholder="60">
+                    <span class="unit">%</span>
+                </div>
+
+                <div class="form-group">
+                    <label>任意継続の標準報酬月額上限</label>
+                    <input type="number" [(ngModel)]="continueMaxMonthAvg" placeholder="30">
+                    <span class="unit">万円</span>
+                </div>
+
+                <div class="form-group">
+                    <label>特例退職の有無</label>
+                    <select [(ngModel)]="isSpecialRetirement">
+                        <option [ngValue]="false">無し</option>
+                        <option [ngValue]="true">有り</option>
+                    </select>
+
+                    @if(isSpecialRetirement === true){
+                        <div class="special-retire-fields">
+                            <div class="form-group">
+                                <label>特例退職の標準報酬月額上限</label>
+                                <input type="number" [(ngModel)]="specialRetirementMax" placeholder="30">
+                                <span class="unit">万円</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>健康保険料の等級上限</label>
+                    <input type="number" [(ngModel)]="maxInsuranceClass" min="1" max="50" placeholder="30">
+                    <span class="unit">級</span>
+                </div>
+
+                <div class="form-group">
+                    <label>健康保険料の等級下限</label>
+                    <input type="number" [(ngModel)]="minInsuranceClass" min="1" max="50" placeholder="30">
+                    <span class="unit">級</span>
+                </div>
+
+                <div class="form-group">
+                    <label>家族割の有無</label>
+                    <select [(ngModel)]="isfamilyDiscount">
+                        <option [ngValue]="false">無し</option>
+                        <option [ngValue]="true">有り</option>
+                    </select>
+                    @if(isfamilyDiscount === true){
+                        <div class="family-discount-group">
+                            <div class="form-group">
+                                <label>扶養一人あたりの月額保険料</label>
+                                <input type="number"[(ngModel)]="dependentMonthlyFee" placeholder="0">
+                                <span class="unit">円</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<button class="subit-btn" (click)="comSave()">保存</button>
+
+<button routerLink="/login-check">戻る</button>
