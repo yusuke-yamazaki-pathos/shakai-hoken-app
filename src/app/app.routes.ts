@@ -9,6 +9,7 @@ import { OutputPageComponent } from './output-page/output-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { EmployeePageComponent } from './employee-page/employee-page.component';
 import { EmployeeEditComponent } from './employee-edit/employee-edit.component';
+import { SalaryComponent } from './salary/salary.component';
 
 
 export const routes: Routes = [
@@ -58,8 +59,18 @@ export const routes: Routes = [
     },
 
     {
+        path: 'employee-edit/:id',
+        component: EmployeeEditComponent
+    },
+
+    {
         path: 'employee-edit',
         component: EmployeeEditComponent
+
+    },
+    {
+        path: 'salary',
+        component: SalaryComponent
     }
 
 

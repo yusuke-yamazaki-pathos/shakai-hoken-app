@@ -245,25 +245,82 @@ $accent-bg: #f9f9fb;           // 扶養エリアなどの背景
   }
 }
 
-// 枠外の下部にある「会社登録」ボタンの装飾
-button[routerLink="/generate-company"] {
-  display: block;
-  max-width: 200px;
-  margin: 0 auto 3rem auto;
-  padding: 0.75rem 1rem;
-  font-size: 0.95rem;
+// 🔹 【追加】無効化（disabled）状態の共通ボタンスタイル
+button[disabled] {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  border-color: #bbbbbb !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 0.6;
+}
+
+// 🔹 【追加】画面下部のアクションボタン用コンテナ
+.action-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 1.5rem auto 3rem auto;
+  padding: 0 2.5rem;
+  box-sizing: border-box;
+}
+
+// 🔹 【追加/調整】下部ナビゲーションボタンの装飾
+button[routerLink] {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
   font-weight: 600;
-  background-color: transparent;
-  color: $primary-color;
-  border: 1px solid $primary-color;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
-  &:hover {
-    background-color: rgba(63, 81, 181, 0.05);
-    border-color: $primary-hover;
-    color: $primary-hover;
+  // 給与データを登録する（メインアクション）
+  &[routerLink="/salary"] {
+    background-color: $primary-color;
+    color: #ffffff;
+    border: 1px solid $primary-color;
+
+    &:not([disabled]):hover {
+      background-color: $primary-hover;
+      border-color: $primary-hover;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(63, 81, 181, 0.2);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // 戻るボタン（サブアクション）
+  &[routerLink="/admin-page"] {
+    background-color: transparent;
+    color: #666666;
+    border: 1px solid $input-border;
+
+    &:hover {
+      background-color: #f5f5f5;
+      color: $text-color;
+    }
+  }
+
+  // 会社登録ボタン（旧スタイルの統合）
+  &[routerLink="/generate-company"] {
+    display: block;
+    max-width: 200px;
+    margin: 0 auto;
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.05);
+      border-color: $primary-hover;
+      color: $primary-hover;
+    }
   }
 }
 
@@ -274,11 +331,23 @@ button[routerLink="/generate-company"] {
     margin: 1rem;
 
     .list-employees {
-      overflow-x: auto; // 横スクロールを可能にする
+      overflow-x: auto; 
       
       table {
-        min-width: 600px; // テーブルが潰れすぎないように最低幅を設定
+        min-width: 600px; 
       }
+    }
+  }
+
+  // 🔹 【追加】スマホ時は下部ボタンを縦並びにする
+  .action-buttons-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+
+    button[routerLink] {
+      width: 100%;
+      text-align: center;
     }
   }
 }

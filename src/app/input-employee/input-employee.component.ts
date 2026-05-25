@@ -9,7 +9,7 @@ import { LoginService } from '../service/login.service';
 
 interface Employee {
 
-  id?: string;
+  employeeId?: string;
   name: string;
   age: number;
   monthAvg: number;
@@ -68,12 +68,15 @@ export class InputEmployeeComponent  implements OnInit {
   private companyService = inject(CompanyService);
   private loginService = inject(LoginService);
 
+  isSaved:boolean = false;
+
   ngOnInit(){
     const companyId = localStorage.getItem('current_company_id');
     const userId = localStorage.getItem('current_user_id');
 
     console.log ('組織ID',companyId);
     console.log('user',userId);
+    
 
     if(companyId){
 
@@ -118,7 +121,7 @@ export class InputEmployeeComponent  implements OnInit {
         monthAvg: this.inputMonthAvg,
         status: this.inputStatus,
         startDate: this.inputStartDate,
-        id: this.inputId,
+        employeeId: this.inputId,
         gender: this.inputGender,
         address: this.inputAddress,
         helthStatus: this.helthInsuranceStatus,
@@ -130,6 +133,7 @@ export class InputEmployeeComponent  implements OnInit {
       });
 
       alert(`保存に成功しました！登録名:${this.inputName}(ID: ${this.inputId})`);
+
 
       this.inputName = '';
       this.inputAge = null;
@@ -143,6 +147,8 @@ export class InputEmployeeComponent  implements OnInit {
       this.employeesPension = null;
       this.dependentCount = null;
       this.dependents = [];
+
+      this.isSaved = true;
 
     } catch(error: any){
       console.error('保存エラー:', error);

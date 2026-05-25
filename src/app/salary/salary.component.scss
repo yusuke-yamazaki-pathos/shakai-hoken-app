@@ -1,0 +1,143 @@
+// デザインに合わせた共通変数（必要に応じて調整してください）
+$primary-color: #3f51b5;
+$primary-hover: #303f9f;
+$border-color: #e0e0e0;
+$bg-light: #f9f9f9;
+$text-color: #333;
+$radius: 6px;
+
+.salary-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: $radius * 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: sans-serif;
+  color: $text-color;
+
+  // 各入力行のスタイル
+  .salary-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+
+    label {
+      width: 120px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    input[type="month"],
+    input[type="number"],
+    input[type="text"],
+    select {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid $border-color;
+      border-radius: $radius;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+      }
+    }
+
+    // 数値入力の幅を円の単位と合わせる調整
+    input[type="number"] {
+      text-align: right;
+    }
+
+    // ボタンのベーススタイル
+    button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: $radius;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s, transform 0.1s;
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    // 「+手当を追加」ボタンの個別スタイル
+    button:not([click="saveSalary()"]):not([click="addAllowance()"]) {
+      background-color: transparent;
+      color: $primary-color;
+      border: 1px dashed $primary-color;
+      width: 100%;
+      margin-top: 0.5rem;
+
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+    }
+  }
+
+  // 新規手当のポップアップ/フォームエリア
+  .add-allowance-form {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background-color: $bg-light;
+    border-radius: $radius;
+    border-left: 4px solid $primary-color;
+    animation: fadeIn 0.25s ease-out;
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: $primary-color;
+      font-size: 1.1rem;
+    }
+
+    // フォーム内の「追加する」ボタン
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      width: 100%;
+      margin-top: 0.5rem;
+
+      &:hover {
+        background-color: #43a047;
+      }
+    }
+  }
+
+  // 「保存」ボタンのコンテナとスタイル
+  .salary-group:last-child {
+    margin-top: 2rem;
+    margin-bottom: 0;
+
+    button {
+      background-color: $primary-color;
+      color: #fff;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.05rem;
+
+      &:hover {
+        background-color: $primary-hover;
+      }
+    }
+  }
+}
+
+// フォーム表示時のふわっとしたアニメーション
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

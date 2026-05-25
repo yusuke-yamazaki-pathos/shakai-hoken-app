@@ -1,11 +1,12 @@
-// カラー変数（他の画面と統一）
-$primary-color: #3f51b5;       // メインの紺色
-$primary-hover: #303f9f;       // ボタンホバー時の濃い紺色
-$text-color: #333333;          // 文字色
-$bg-color: #f5f7fa;            // 背景の薄いグレー
-$card-bg: #ffffff;             // フォームの白
-$border-color: #cccccc;        // 枠線のグレー
-$border-focus: #3f51b5;        // 入力中（フォーカス時）の枠線
+// カラー変数（admin-page のスタイルと完全に統一）
+$primary-color: #2b6cb0;    // メインの青緑
+$primary-hover: #1a4976;    // ボタンのホバー色
+$bg-color: #f7fafc;         // 全体の背景の薄いグレー
+$card-bg: #ffffff;          // フォームの白
+$text-main: #2d3748;        // メインの文字色
+$text-muted: #718096;       // 補足の文字色
+$border-color: #e2e8f0;     // 枠線のライトグレー
+$border-focus: #2b6cb0;     // フォーカス時の枠線
 
 :host {
   display: flex;
@@ -18,62 +19,63 @@ $border-focus: #3f51b5;        // 入力中（フォーカス時）の枠線
 
 .loguin-user-containar {
   background-color: $card-bg;
-  padding: 2.5rem;
+  padding: 40px; // レムからピクセルに統一して余白感を合わせる
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); // 影の濃さを共通化
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
 
   // 各入力項目のグループ
   .login-u-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
 
     label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 13px;
       font-weight: 600;
-      color: #555555;
-      margin-bottom: 0.5rem;
+      color: $text-muted; // 補足文字色に統一
+      margin-bottom: 8px;
     }
 
     // 入力欄（input）とセレクトボックス（select）に同じデザインを適用
     input[type="text"], select {
       width: 100%;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
+      padding: 12px 16px;
+      font-size: 14px;
       border: 1px solid $border-color;
-      border-radius: 6px;
-      background-color: #fafafa;
+      border-radius: 8px; // 角の丸みを8pxに統一
+      background-color: #f8fafc; // テーブルヘッダーと同じ背景色
       box-sizing: border-box;
-      color: $text-color;
-      transition: all 0.2s ease;
+      color: $text-main;
+      transition: all 0.2s ease-in-out;
 
       &:focus {
         outline: none;
         border-color: $border-focus;
         background-color: $card-bg;
-        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+        box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15); // フォーカスリングの色をメインの青に
       }
 
       &::placeholder {
-        color: #bbbbbb;
+        color: #a0aec0;
       }
     }
 
     // セレクトボックス専用の微調整
     select {
       cursor: pointer;
-      appearance: none; // ブラウザ固有の矢印をリセット（必要に応じて）
-      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%23555555'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      appearance: none;
+      // 矢印のアイコン色を $text-muted (#718096) の色味に変更
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 1rem center;
       background-size: 1.5rem;
       padding-right: 2.5rem;
 
-      // 未選択状態（初期値）の文字色を少し薄くする
+      // 未選択状態（初期値）の文字色
       &[ng-reflect-model=""], &:invalid {
-        color: #bbbbbb;
+        color: #a0aec0;
       }
     }
   }
@@ -81,27 +83,27 @@ $border-focus: #3f51b5;        // 入力中（フォーカス時）の枠線
   // ログインボタン（メインアクション）
   .subit-btn {
     width: 100%;
-    padding: 0.85rem;
-    font-size: 1rem;
+    padding: 14px;
+    font-size: 15px;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: 8px; // 角の丸みを8pxに統一
     cursor: pointer;
     border: none;
     background-color: $primary-color;
     color: #ffffff;
-    margin-top: 1rem;
-    box-shadow: 0 2px 4px rgba(63, 81, 181, 0.2);
-    transition: all 0.2s ease;
+    margin-top: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
     box-sizing: border-box;
 
     &:hover {
       background-color: $primary-hover;
       transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+      box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
     }
 
     &:active {
-      transform: translateY(0);
+      transform: translateY(1px);
     }
   }
 }

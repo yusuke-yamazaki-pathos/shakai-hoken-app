@@ -2,7 +2,7 @@
     <div class="login-u-group">
         <select  [(ngModel)]="selectCompany" name="compnaySelect">
             <option value="">--組織を選択してください--</option>
-            @for(company of companyNames; track company.id){
+            @for(company of companyNames; track company?.id){
                 <option [value]="company.id">{{company.name}}</option>
             }
         </select>

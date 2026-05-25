@@ -1,0 +1,61 @@
+<div class="salary-container">
+    <h4>給与情報</h4>
+    <div class="salary-group">
+        <label>支給月</label>
+        <input type="month" [(ngModel)]="inputPayMonth" placeholder="2026-05">
+    </div>
+    @for(wage of monthPayroll.fixedWages; track wage.name){
+        <div class="salary-group">
+            <label>{{wage.name}}</label>
+            <input type="number" [(ngModel)]="wage.amount">円
+        </div>
+    }
+
+    @for(wage of monthPayroll.variableWages; track wage.name){
+        <div class="salary-group">
+            <label>{{wage.name}}</label>
+            <input type="number" [(ngModel)]="wage.amount">円
+        </div>
+    }
+
+    <div class="salary-group">
+        <label>交通費</label>
+        <input type="number" [(ngModel)]="inputPaytransportFee">円
+    </div>
+
+    <div class="salary-group">
+        <button (click)="isAdding=true">+手当を追加</button>
+    </div>
+
+    @if(isAdding){
+        <div class="add-allowance-form">
+            <h4>新規手当の登録</h4>
+
+            <div class="salary-group">
+                <label>手当名</label>
+                <input type="text" [(ngModel)]="inputAllowanceName" placeholder="例:役職手当">
+            </div>
+            
+            <div class="salary-group">
+                <label>手当の区分</label>
+                <select [(ngModel)]="inputIsFixedWages">
+                    <option [value]="true">固定費（基本給、役職手当など）</option>
+                    <option [value]="false">変動費（残業代、歩合給など）</option>
+                </select>
+            </div>
+
+            <div class="salary-group">
+                <button (click)="addAllowance()">追加する</button>
+            </div>
+            
+        </div>
+    }
+    
+    <div class="salary-group">
+        <button (click)="saveSalary()">保存</button>
+    </div>
+
+    <div class="salary-group">
+        <button routerLink="/admin-page">戻る</button>
+    </div>
+</div>

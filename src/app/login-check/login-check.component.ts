@@ -16,7 +16,9 @@ export class LoginCheckComponent implements OnInit {
 
     const checkLogin : string | null= localStorage.getItem('contract_verified');
 
-    if(checkLogin === 'true'){
+    console.log(checkLogin);
+
+    if(checkLogin !== null && checkLogin === 'true'){
       this.router.navigate(['/user-login']);
 
     }

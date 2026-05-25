@@ -34,6 +34,7 @@ export class UserLoginComponent implements OnInit {
     const existingData = localStorage.getItem('saved_company_ids');
     this.companyIds = existingData? JSON.parse(existingData):[];
     this.serchCompanyData();
+
     
   }
 
@@ -47,6 +48,7 @@ export class UserLoginComponent implements OnInit {
           companyData.id = id;
         }
         this.companyNames.push(companyData);
+        console.log(companyData);
         
       } 
       catch (error){
@@ -68,6 +70,7 @@ export class UserLoginComponent implements OnInit {
       const result: boolean = await this.loginService.userLogin(this.selectCompany, this.inputUserId, this.inputUserPass);
 
       if(result){
+        
         this.router.navigate(['/output-page']);
       }
 

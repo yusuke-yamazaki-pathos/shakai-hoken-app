@@ -22,7 +22,9 @@ export class LoginService {
         if(companyData['pass'] === inputPass){
 
           this.current_company_id = inputId;
-          localStorage.setItem('current_company_id',inputId);
+          const existingIds = JSON.parse(localStorage.getItem('saved_company_ids') ?? '[]');
+          existingIds.push(inputId);
+          localStorage.setItem('saved_company_ids',JSON.stringify(existingIds));
           console.log('組織ログイン成功',inputId);
 
           return true;
@@ -46,7 +48,7 @@ export class LoginService {
 
       const q = query(
         employeeRef,
-        where('id','==',inputEmployeeId),
+        where('employeeId','==',inputEmployeeId),
       );
 
       const querySnapshot = await getDocs(q);
@@ -86,7 +88,7 @@ export class LoginService {
 
     const q = query(
       userRef,
-      where('id', '==', userId),
+      where('employeeId', '==', userId),
     );
 
     const userSnap = await getDocs(q);

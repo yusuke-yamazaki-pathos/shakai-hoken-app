@@ -79,7 +79,7 @@ export class GenerateCompanyComponent {
       })
 
       const employeeRef = await this.companyService.saveEmployees(docRef.id,{
-        id:this.inputAdminId,
+        employeeId:this.inputAdminId,
         pass: this.inputAdminPass,
         name: '管理者'
 

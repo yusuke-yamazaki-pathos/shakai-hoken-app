@@ -161,7 +161,7 @@
             <td class="month-avg-text">{{ emp?.monthAvg }}</td>
             <td class="status-text">{{ emp?.status }}</td>
             <td class="start-dat-text">{{ emp?.startDate | date:'yyyy/MM/dd'}}</td>
-            <td class="num-text">{{ emp?.id }}</td>
+            <td class="num-text">{{ emp?.employeeId }}</td>
           </tr>
           <tr *ngIf="!(employees$ | async)?.length">
             <td colspan="3" class="empty-text">社員が登録されていません</td>
@@ -171,4 +171,5 @@
     </div>
   </div>
   
-  <button routerLink="/generate-company">会社登録</button>
+  <button routerLink="/admin-page">戻る</button>
+  <button routerLink="/salary" [disabled]="!isSaved">給与データを登録する</button>

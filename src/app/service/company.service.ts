@@ -43,6 +43,8 @@ export class CompanyService {
       ...employeeData,
       createdAt: new Date()
     });
+
+    localStorage.setItem('current_user_data', JSON.stringify(employeeData));
   }
 
   async serchCompany(id: string): Promise<any>{
@@ -64,7 +66,7 @@ export class CompanyService {
 
    const q = query(
     employeeCollection,
-    where('id', '==', userId)
+    where('employeeId', '==', userId)
    );
 
    const userSnap = await getDocs(q);

@@ -1,1 +1,35 @@
-<p>admin-page works!</p>
+<div class="admin-containar">
+    <div class="admin-group">
+        <button routerLink="/input-employee">従業員登録</button>
+    </div>
+
+    <div class="list-employees">
+        <h3>社員一覧</h3>
+    
+        <table>
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>年齢</th>
+              <th>標準報酬月額</th>
+              <th>勤務状況</th>
+              <th>入社日</th>
+              <th>社員番号</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of employees$ | async" (click)="openEditDialog(emp)">
+              <td class="name-text">{{ emp?.name }}</td>
+              <td class="age-text">{{ emp?.age }}歳</td>
+              <td class="month-avg-text">{{ emp?.monthAvg }}</td>
+              <td class="status-text">{{ emp?.status }}</td>
+              <td class="start-dat-text">{{ emp?.startDate | date:'yyyy/MM/dd'}}</td>
+              <td class="num-text">{{ emp?.employeeId }}</td>
+            </tr>
+            <tr *ngIf="!(employees$ | async)?.length">
+              <td colspan="6" class="empty-text">社員が登録されていません</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
