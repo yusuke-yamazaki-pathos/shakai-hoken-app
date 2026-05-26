@@ -24,6 +24,22 @@
     </div>
 
     <div class="salary-group">
+        <label>出勤日数</label>
+        <input type="number" [(ngModel)]="inputWorkDays">日
+    </div>
+
+    <div clas="salary-group">
+        <label>欠勤日数</label>
+        <input type="number" [(ngModel)]="inputAbsentDays">日
+    </div>
+
+    <div class="salary-group">
+        <label>有給日数</label>
+        <input type="number" [(ngModel)]="inputPaidLeaveDays">日
+    </div>
+
+
+    <div class="salary-group">
         <button (click)="isAdding=true">+手当を追加</button>
     </div>
 

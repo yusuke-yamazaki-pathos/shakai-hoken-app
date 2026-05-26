@@ -17,8 +17,9 @@ interface Employee {
   startDate: string;
   gender: string;
   address: string;
-  helthStatus: string;
-  employeePension: string;
+  helthStatus: string;//健康保険加入状況（３パターン）
+  employmentType: string;
+  employeePension: string;//厚生年金加入状況（３パターン）
   dependentCount: number;
   dependents: Dependent[];
   pass: string;
@@ -128,7 +129,8 @@ export class InputEmployeeComponent  implements OnInit {
         employeePension: this.employeesPension,
         dependentCount: this.dependentCount,
         dependents: this.dependents,
-        pass: this.inputPass
+        pass: this.inputPass,
+        employmentType: this.inputEmploymentType
 
       });
 
