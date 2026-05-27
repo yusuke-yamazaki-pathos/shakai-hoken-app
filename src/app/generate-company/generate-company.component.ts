@@ -81,7 +81,8 @@ export class GenerateCompanyComponent {
   inputComAdd: string = "";
   inputComPass: string = "";
   inputComHelthInsurance: string = "";
-  inputComRate: number | null = null;
+  inputComHealthRate: number | null = null;
+  inputComCareRate: number | null = null;
   selectSarary: string = "";
   selectCollect: string = "";
   inputAdminCode: string = "";
@@ -120,7 +121,8 @@ export class GenerateCompanyComponent {
     this.inputAdminPass = randomAdminPass;
 
     if(this.inputComHelthInsurance === '協会けんぽ'){
-      this.inputComRate = 0.5;
+      this.inputComHealthRate = 0.5;
+      this.inputComCareRate = 0.5;
       if(this.inputComAdd && KYOUKAI_KENPO_RATES[this.inputComAdd]){
         this.healthInsuranceRate = KYOUKAI_KENPO_RATES[this.inputComAdd].healthRate;
       }
@@ -133,13 +135,13 @@ export class GenerateCompanyComponent {
         addres: this.inputComAdd,
         pass: this.inputComPass,
         helthInsurance: this.inputComHelthInsurance,
-        comRate: this.inputComRate,
+        healthComRate: this.inputComHealthRate,
+        careComRate: this.inputComCareRate,
         sarary: this.selectSarary,
         collect: this.selectCollect,
         adminCode: this.inputAdminCode,
         isSpecifiedCompany: this.isSpecifiedCompany,
         isSpecialRetirement: this.isSpecialRetirement,
-        comrate: this.inputComRate,
         continueMaxMonthAvg: this.continueMaxMonthAvg,
         specialRetirementMax: this.specialRetirementMax,
         maxInsuranceClass: this.maxInsuranceClass,
@@ -196,7 +198,8 @@ export class GenerateCompanyComponent {
       this.inputAdminCode = "";
       this.isSpecifiedCompany = false;
       this.isSpecialRetirement = false;
-      this.inputComRate = null;
+      this.inputComHealthRate = null;
+      this.inputComCareRate = null;
       this.specialRetirementMax = null;
       this.maxInsuranceClass = null;
       this.minInsuranceClass = null;

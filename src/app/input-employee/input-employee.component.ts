@@ -133,7 +133,8 @@ export class InputEmployeeComponent  implements OnInit {
         dependentCount: this.dependentCount,
         dependents: this.dependents,
         pass: this.inputPass,
-        employmentType: this.inputEmploymentType
+        employmentType: this.inputEmploymentType,
+        birthDay: this.inputBirthDay,
 
       });
 
@@ -153,6 +154,7 @@ export class InputEmployeeComponent  implements OnInit {
       this.employeesPension = null;
       this.dependentCount = null;
       this.dependents = [];
+      this.inputBirthDay = "";
 
       this.isSaved = true;
 

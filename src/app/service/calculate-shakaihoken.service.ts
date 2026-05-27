@@ -99,12 +99,30 @@ export class CalculateShakaihokenService {
     }
   }
 
-  async getComRate(companyId: string){
+  async getCareRate(companyId: string){
     const companyDoc = doc(this.firestore, 'company', companyId);
     const companySnap =  await getDoc(companyDoc);
     if(companySnap.exists()){
       const companyData = companySnap.data();
-      return companyData['comrate'];
+      return companyData['longermCareRate'];
+    }
+  }
+
+  async getHealthComRate(companyId: string){
+    const companyDoc = doc(this.firestore, 'company', companyId);
+    const companySnap =  await getDoc(companyDoc);
+    if(companySnap.exists()){
+      const companyData = companySnap.data();
+      return companyData['healthcomRate'];
+    }
+  }
+
+  async getCareComRate(companyId: string){
+    const companyDoc = doc(this.firestore, 'company', companyId);
+    const companySnap =  await getDoc(companyDoc);
+    if(companySnap.exists()){
+      const companyData = companySnap.data();
+      return companyData['careComRate'];
     }
   }
 
@@ -161,6 +179,50 @@ export class CalculateShakaihokenService {
       totalCost: totalPensionWage,
       createdAt: new Date()
     })
+
+  }
+
+  async saveCareInsurance(companyId: string, userId: string, targetMonth: string, companyCare: number, userCare: number, totalCare: number ){
+    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
+    const q = query(
+      employeeRef,
+      where('employeeId', '==', userId)
+    );
+    const userSnap = await getDocs(q);
+    const employeesId =userSnap.docs[0].id;
+
+    const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary');
+    const salaryq = query(
+      salaryCollection,
+      where('targetMonth', '==', targetMonth)
+    );
+    const salarySnap = await getDocs(salaryq);
+    const salaryId = salarySnap.docs[0].id;
+
+    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary', salaryId, 'shakaihoken');
+    const pensionDoc = doc(shakaihokenCollectionRef, 'care');
+    await setDoc(pensionDoc,{
+      companyCost: companyCare,
+      userCost: userCare,
+      totalCost: totalCare,
+      createdAt: new Date()
+    })
+
+  }
+
+  isKaigohoken(birthDate: string): boolean{
+    if(!birthDate) return false;
+
+    const birthDay = new Date(birthDate);
+    const today = new Date();
+
+    const currentYearBirthdayMinus1 = new Date(today.getFullYear(), birthDay.getMonth(),birthDay.getDate() -1);
+    let age = today.getFullYear() - birthDay.getFullYear();
+    if(today < currentYearBirthdayMinus1){
+      age--;
+    }
+
+    return age >= 40 && age < 65;
 
   }
 }

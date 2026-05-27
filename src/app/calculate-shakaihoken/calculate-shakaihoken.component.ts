@@ -27,10 +27,16 @@ export class CalculateShakaihokenComponent implements OnInit {
   userPensionWage: number | null = null;
   companyHealthInsurance: number | null = null;
   companyPensionWage: number | null = null;
-  comRate: number | null = null;
+  healthcomRate: number | null = null;
+  careComRate: number | null = null;
   totalHealthInsurance: number | null= null;
   totalPensionWage: number | null = null;
   targetMonth: string = "";
+  isTarget: boolean = false;
+  careRate: number | null = null;
+  totalCareInsurance: number | null = null;
+  companyCareInsurance:number | null = null;
+  userCareInsurance: number | null = null;
 
 
 
@@ -60,29 +66,51 @@ export class CalculateShakaihokenComponent implements OnInit {
     await Promise.all([
       this.getHealthRate(),
       this.getPensionRate(),
-      this.getComRate()
+      this.getHealthComRate(),
+      this.isKaigohokenTarget()
     ]);
+
+
+    if(this.isTarget){
+      await this.getCareRate()
+      await this.getCareComRate()
+    }
+
+
+
 
     this.healthMonthAvg = this.userData.healthMonthAvg;
     this.pensionMonthAvg = this.userData.pensionMonthAvg;
     this.targetMonth = localStorage.getItem('targetMonth') || "";
 
     this.totalHealthInsurance = this.healthMonthAvg! * this.healthRate!;
-    this.companyHealthInsurance = this.totalHealthInsurance * this.comRate!;
+    this.companyHealthInsurance = this.totalHealthInsurance * this.healthcomRate!;
     this.userhealthInsurance = this.totalHealthInsurance - this.companyHealthInsurance;
 
     this.totalPensionWage = this.pensionMonthAvg! * this.pensionRate!;
     this.companyPensionWage = this.totalPensionWage / 2;
     this.userPensionWage = this.totalPensionWage / 2;
 
+    if(this.isTarget){
+      this.totalCareInsurance = this.healthMonthAvg! * this.careRate!;
+      this.companyCareInsurance = this.totalCareInsurance * this.careComRate!;
+      this.userCareInsurance = this.totalCareInsurance - this.companyCareInsurance;
+    }
+
     console.log('健康保険料率:',this.healthRate);
     console.log('健康保険標準報酬月額:',this.healthMonthAvg);
     console.log('総健康保険料:',this.totalHealthInsurance);
+    console.log('会社負担割合:',this.healthcomRate);
     console.log('会社負担けんぽ:',this.companyHealthInsurance);
     console.log('個人負担けんぽ:',this.userhealthInsurance);
     
     await this.calculateShaikaihoken.saveHealthInsurance(this.currentCompanyId, this.currentUserId,this.targetMonth,this.companyHealthInsurance, this.userhealthInsurance, this.totalHealthInsurance);
     await this.calculateShaikaihoken.savePensionWage(this.currentCompanyId, this.currentUserId, this.targetMonth, this.companyPensionWage, this.userPensionWage, this.totalPensionWage);
+    if(this.isTarget){
+
+      await this.calculateShaikaihoken.saveCareInsurance(this.currentCompanyId, this.currentUserId,this.targetMonth,this.companyCareInsurance!, this.userCareInsurance!, this.totalCareInsurance!);
+
+    }
 
   }
 
@@ -98,11 +126,23 @@ export class CalculateShakaihokenComponent implements OnInit {
 
   }
 
-  async getComRate(){
-    this.comRate = await this.calculateShaikaihoken.getComRate(this.currentCompanyId);
+  async getHealthComRate(){
+    this.healthcomRate = await this.calculateShaikaihoken.getHealthComRate(this.currentCompanyId);
   }
 
+  async isKaigohokenTarget(){
+    this.isTarget = await this.calculateShaikaihoken.isKaigohoken(this.userData.birthDay);
+  }
 
+  async getCareComRate(){
+    this.careComRate = await this.calculateShaikaihoken.getCareComRate(this.currentCompanyId);
+  }
+
+  async getCareRate(){
+
+    this.careRate = await this.calculateShaikaihoken.getCareRate(this.currentCompanyId);
+
+  }
 }
 
     
