@@ -10,6 +10,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { EmployeePageComponent } from './employee-page/employee-page.component';
 import { EmployeeEditComponent } from './employee-edit/employee-edit.component';
 import { SalaryComponent } from './salary/salary.component';
+import { CalculateShakaihokenComponent } from './calculate-shakaihoken/calculate-shakaihoken.component';
 
 
 export const routes: Routes = [
@@ -71,6 +72,11 @@ export const routes: Routes = [
     {
         path: 'salary',
         component: SalaryComponent
+    },
+
+    {
+        path: 'cal-insurance',
+        component: CalculateShakaihokenComponent
     }
 
 

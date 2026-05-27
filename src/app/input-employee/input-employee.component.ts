@@ -12,7 +12,8 @@ interface Employee {
   employeeId?: string;
   name: string;
   age: number;
-  monthAvg: number;
+  healthMonthAvg: number;
+  pensionMonthAvg: number;
   status: string;
   startDate: string;
   gender: string;
@@ -48,7 +49,8 @@ export class InputEmployeeComponent  implements OnInit {
   inputName : string = '';
   inputBirthDay: string = "";
   inputAge : number | null = null;
-  inputMonthAvg : number | null = null;
+  inputHealthMonthAvg : number | null = null;
+  inputPensionMonthAvg: number | null = null;
   inputStatus : string = '';
   inputStartDate: string = '';
   inputId: string = "";
@@ -119,7 +121,8 @@ export class InputEmployeeComponent  implements OnInit {
 
         name: this.inputName,
         age: this.inputAge,
-        monthAvg: this.inputMonthAvg,
+        healthMonthAvg: this.inputHealthMonthAvg,
+        pensionMonthAvg: this.inputPensionMonthAvg,
         status: this.inputStatus,
         startDate: this.inputStartDate,
         employeeId: this.inputId,
@@ -139,7 +142,8 @@ export class InputEmployeeComponent  implements OnInit {
 
       this.inputName = '';
       this.inputAge = null;
-      this.inputMonthAvg = null;
+      this.inputHealthMonthAvg = null;
+      this.inputPensionMonthAvg = null;
       this.inputStatus = '';
       this.inputStartDate = '';
       this.inputId = "";

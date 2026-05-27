@@ -2,6 +2,7 @@ import { Component, inject , OnInit} from '@angular/core';
 import { SalarydataService } from '../service/salarydata.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { CalculateShakaihokenService } from '../service/calculate-shakaihoken.service';
 
 interface Allowance{
   name: string;
@@ -18,7 +19,8 @@ interface MonthPayroll{
   absentDays: number;
   paidLeaveDays: number;
   paymentBaseDays: number;
-  monthAvg: number;
+  healthMonthAvg: number;
+  pensionMonthAvg: number;
   totalWages: number;
 }
 
@@ -34,6 +36,7 @@ interface MonthPayroll{
 export class SalaryComponent implements OnInit {
   private salaryData = inject(SalarydataService);
   private router = inject(Router);
+  private calShakaihoken = inject(CalculateShakaihokenService);
 
 
   inputAllowanceName: string = "";
@@ -57,7 +60,8 @@ export class SalaryComponent implements OnInit {
     absentDays: 0,
     paidLeaveDays: 0,
     paymentBaseDays: 0,
-    monthAvg: 0,
+    healthMonthAvg: 0,
+    pensionMonthAvg:0,
     totalWages: 0
   };
 
@@ -90,20 +94,33 @@ export class SalaryComponent implements OnInit {
     this.monthPayroll.transportationFee = this.inputPaytransportFee || 0;
     this.monthPayroll.paymentBaseDays = this.calculatePaymentBaseDays();
     this.monthPayroll.totalWages = this.calculateTotalWages();
-    this.monthPayroll.monthAvg = this.userData.monthAvg;
+    this.monthPayroll.healthMonthAvg = this.userData.healthMonthAvg;
+    this.monthPayroll.pensionMonthAvg =this.userData.pensionMonthAvg;
 
-    if(this.monthPayroll.monthAvg === null){
-      this.monthPayroll.monthAvg = this.monthPayroll.totalWages;
-      this.userData.monthAvg = this.monthPayroll.monthAvg;
+    if(this.monthPayroll.healthMonthAvg === null){
+      this.monthPayroll.healthMonthAvg = this.calShakaihoken.getMonthAvg(this.monthPayroll.totalWages);
+      this.userData.healthMonthAvg = this.monthPayroll.healthMonthAvg;
+      localStorage.setItem('current_user_data',JSON.stringify(this.userData));
+
+      await this.salaryData.updateHealthMonthAvg(this.currentCompanyId, this.currentUserId, this.monthPayroll.healthMonthAvg);
+      
+    }
+
+    if(this.monthPayroll.pensionMonthAvg === null){
+      this.monthPayroll.pensionMonthAvg = this.calShakaihoken.getPensionMonthAvg(this.monthPayroll.totalWages);
+      this.userData.pensionMonthAvg = this.monthPayroll.pensionMonthAvg;
+      localStorage.setItem('current_user_data',JSON.stringify(this.userData));
+
+      await this.salaryData.updatePensionMonthAvg(this.currentCompanyId, this.currentUserId, this.monthPayroll.pensionMonthAvg);
     }
 
     await this.salaryData.saveSalaryData(this.currentCompanyId, this.currentUserId, {
       ...this.monthPayroll
     });
 
-    await this.salaryData.updateMonthAvg(this.currentCompanyId, this.currentUserId, this.userData.monthAvg);
+    localStorage.setItem('targetMonth',this.monthPayroll.targetMonth);
 
-    this.router.navigate(['/admin-page']);
+    this.router.navigate(['/cal-insurance']);
   }
 
   addAllowance(){

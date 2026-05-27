@@ -21,9 +21,6 @@ export class SalarydataService {
       ...salaryData,
       createdAt: new Date()
     })
-
-    localStorage.removeItem('current_user_data');
-
   }
 
   async calculateMonthAvg(companyId: string, userId: string){
@@ -51,7 +48,7 @@ export class SalarydataService {
 
   }
 
-  async updateMonthAvg(companyId: string, userId: string, monthAvg: number){
+  async updateHealthMonthAvg(companyId: string, userId: string, monthAvg: number){
     const userDocRef = collection(this.firestore, 'company', companyId,'employees');
     const q = query(
       userDocRef,
@@ -63,7 +60,24 @@ export class SalarydataService {
 
       const employeeDoc = doc(this.firestore, 'company', companyId, 'employees', docRef.id);
       await updateDoc(employeeDoc,{
-        monthAvg: monthAvg
+        healthMonthAvg: monthAvg
+      });
+    }
+  }
+
+  async updatePensionMonthAvg(companyId: string, userId: string, monthAvg: number){
+    const userDocRef = collection(this.firestore, 'company', companyId,'employees');
+    const q = query(
+      userDocRef,
+      where('employeeId', '==', userId)
+    );
+    const userSnap = await getDocs(q);
+    if(!userSnap.empty){
+      const docRef = userSnap.docs[0].ref;
+
+      const employeeDoc = doc(this.firestore, 'company', companyId, 'employees', docRef.id);
+      await updateDoc(employeeDoc,{
+        pensionMonthAvg: monthAvg
       });
     }
   }

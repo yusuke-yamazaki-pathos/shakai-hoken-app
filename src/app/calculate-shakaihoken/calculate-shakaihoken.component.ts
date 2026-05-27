@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CalculateShakaihokenService } from '../service/calculate-shakaihoken.service';
 import { combineLatest } from 'rxjs';
+import { JsonPipe } from '@angular/common';
+import { Router, RouterLink }from '@angular/router';
 
 @Component({
   selector: 'app-calculate-shakaihoken',
@@ -9,45 +11,98 @@ import { combineLatest } from 'rxjs';
   templateUrl: './calculate-shakaihoken.component.html',
   styleUrl: './calculate-shakaihoken.component.scss'
 })
-export class CalculateShakaihokenComponent {
+export class CalculateShakaihokenComponent implements OnInit {
 
-  private calculateShaikaihoken = inject(CalculateShakaihokenService)
+  private calculateShaikaihoken = inject(CalculateShakaihokenService);
+  private router = inject(Router);
 
   currentCompanyId: string = "";
   currentUserId: string = "";
   userData: any = null;
-  isHealthInsurance: boolean = false;
+  healthRate: number | null = null;
+  pensionRate: number | null = null;
+  healthMonthAvg: number | null = null;
+  pensionMonthAvg: number | null = null;
+  userhealthInsurance: number | null = null;
+  userPensionWage: number | null = null;
+  companyHealthInsurance: number | null = null;
+  companyPensionWage: number | null = null;
+  comRate: number | null = null;
+  totalHealthInsurance: number | null= null;
+  totalPensionWage: number | null = null;
+  targetMonth: string = "";
 
-  ngOnInit(){
+
+
+
+
+  async ngOnInit(){
     this.currentCompanyId = localStorage.getItem('current_company_id') || "";
     this.currentUserId = localStorage.getItem('current_user_id') || "";
-    if(this.currentUserId === "admin"){
-      const userDataString = localStorage.getItem('current_user_data');
-      if(userDataString){
-        this.userData = JSON.parse(userDataString);
-        this.currentUserId = this.userData.employeeId;
-      };
+    const userDataString = localStorage.getItem('current_user_data');
+    if(userDataString){
+      this.userData = JSON.parse(userDataString);
     }
-    this.checkCompanyInsurance();
-  }
-
-  async checkCompanyInsurance() : Promise<boolean>{
-
-    this.isHealthInsurance =  await this.calculateShaikaihoken.judghCompnyInsurance(this.currentCompanyId);
-
-  }
+    if(this.currentUserId === "admin"){
+     this.currentUserId = this.userData.employeeId;
+    }
 
     
 
+    await this.calInsurance();
 
-
-
-
-
-
+    this.router.navigate(['/admin-page']);
 
   }
 
+  async calInsurance(){
+
+    await Promise.all([
+      this.getHealthRate(),
+      this.getPensionRate(),
+      this.getComRate()
+    ]);
+
+    this.healthMonthAvg = this.userData.healthMonthAvg;
+    this.pensionMonthAvg = this.userData.pensionMonthAvg;
+    this.targetMonth = localStorage.getItem('targetMonth') || "";
+
+    this.totalHealthInsurance = this.healthMonthAvg! * this.healthRate!;
+    this.companyHealthInsurance = this.totalHealthInsurance * this.comRate!;
+    this.userhealthInsurance = this.totalHealthInsurance - this.companyHealthInsurance;
+
+    this.totalPensionWage = this.pensionMonthAvg! * this.pensionRate!;
+    this.companyPensionWage = this.totalPensionWage / 2;
+    this.userPensionWage = this.totalPensionWage / 2;
+
+    console.log('健康保険料率:',this.healthRate);
+    console.log('健康保険標準報酬月額:',this.healthMonthAvg);
+    console.log('総健康保険料:',this.totalHealthInsurance);
+    console.log('会社負担けんぽ:',this.companyHealthInsurance);
+    console.log('個人負担けんぽ:',this.userhealthInsurance);
+    
+    await this.calculateShaikaihoken.saveHealthInsurance(this.currentCompanyId, this.currentUserId,this.targetMonth,this.companyHealthInsurance, this.userhealthInsurance, this.totalHealthInsurance);
+    await this.calculateShaikaihoken.savePensionWage(this.currentCompanyId, this.currentUserId, this.targetMonth, this.companyPensionWage, this.userPensionWage, this.totalPensionWage);
+
+  }
+
+  async getHealthRate(){
+
+    this.healthRate = await this.calculateShaikaihoken.getHealthRate(this.currentCompanyId);
+
+  }
+
+  async getPensionRate(){
+
+    this.pensionRate = await this.calculateShaikaihoken.getPensionRate(this.currentCompanyId);
+
+  }
+
+  async getComRate(){
+    this.comRate = await this.calculateShaikaihoken.getComRate(this.currentCompanyId);
+  }
 
 
 }
+
+    

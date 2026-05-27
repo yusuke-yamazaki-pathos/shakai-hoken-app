@@ -120,6 +120,7 @@ export class GenerateCompanyComponent {
     this.inputAdminPass = randomAdminPass;
 
     if(this.inputComHelthInsurance === '協会けんぽ'){
+      this.inputComRate = 0.5;
       if(this.inputComAdd && KYOUKAI_KENPO_RATES[this.inputComAdd]){
         this.healthInsuranceRate = KYOUKAI_KENPO_RATES[this.inputComAdd].healthRate;
       }
@@ -146,6 +147,7 @@ export class GenerateCompanyComponent {
         dependentMonthlyFee: this.dependentMonthlyFee,
         welfarePensionRate: this.welfarePensionRate, //厚生年金料率
         longermCareRate: this.longermCareRate,
+        healthInsuranceRate: this.healthInsuranceRate
 
     
       })
