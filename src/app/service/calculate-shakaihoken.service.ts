@@ -1,5 +1,11 @@
 import { Injectable,inject } from '@angular/core';
-import { Firestore, doc, getDocs, collection, getDoc, query, where, setDoc } from '@angular/fire/firestore'
+import { Firestore, doc, getDocs, collection, getDoc, query, where, setDoc, addDoc } from '@angular/fire/firestore';
+
+interface Insurance{
+  totalAmount: number;
+  comAmount: number;
+  userAmount: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -77,9 +83,6 @@ export class CalculateShakaihokenService {
     return this.getMonthAvg(monthAvg);
   }
 
-  async calInsurance(companyId: string, userId: string){
-    //ここで会社の料率と従業員の報酬月額する
-  }
 
  async getHealthRate(companyId: string){
     const companyDoc = doc(this.firestore, 'company', companyId);
@@ -223,6 +226,101 @@ export class CalculateShakaihokenService {
     }
 
     return age >= 40 && age < 65;
+
+  }
+
+  async saveBonus(companyId: string, userId: string, bonusData: any){
+
+    const employeeCollection = collection(this.firestore, 'company', companyId, 'employees');
+    const q = query(
+      employeeCollection,
+      where('employeeId', '==', userId)
+    );
+
+    const employeeSnap = await getDocs(q);
+    const employeeData = employeeSnap.docs[0].data();
+    const birthDate = employeeData['birthDay'];
+
+
+    let isTarget: boolean = false;
+
+
+    const healthRate = await this.getHealthRate(companyId); // 料率
+    const pensionRate = await this.getPensionRate(companyId);
+    
+    const healthComRate = await this.getHealthComRate(companyId); //会社負担割合
+    const pensionComRate = 0.5;
+
+    const standardBonusAmount = bonusData.standardBonus;
+    
+
+    const [ totalHealthInsurance, healthComInsurance, healthUserInsurance ] = await this.calInsurance( standardBonusAmount, healthRate, healthComRate );
+    const [ totalPensionWage, pensionComWage, pensionUserWage ] = await this.calInsurance(standardBonusAmount, pensionRate, pensionComRate);
+
+    await this.saveInsuranceBonus(companyId, userId, bonusData.date, totalHealthInsurance, healthComInsurance, healthUserInsurance, 'health');
+    await this.saveInsuranceBonus(companyId, userId, bonusData.date, totalPensionWage, pensionComWage, pensionUserWage, 'pension');
+    
+   
+    
+    isTarget = await this.isKaigohoken(birthDate);
+    if(isTarget){
+      const careRate = await this.getCareRate(companyId);
+      const careComRate = await this.getCareComRate(companyId);
+
+      const [ totalCareAmount, careComAmount, careUserAmount ] = await this.calInsurance(standardBonusAmount, careRate, careComRate);
+      await this.saveInsuranceBonus(companyId, userId, bonusData.date,totalCareAmount, careComAmount, careUserAmount,'care');
+
+    }
+
+
+    
+
+
+
+
+
+  }
+
+  async calInsurance(standardAmount: number, rate: number, ratio: number){
+
+    const calTotalAmount = standardAmount * rate;
+    const calComAmount = calTotalAmount * ratio;
+    const calUserAmount = calTotalAmount - calComAmount;
+
+    return [
+      Math.floor(calTotalAmount),
+      Math.floor(calComAmount),
+      Math.floor(calUserAmount)
+    ];
+
+  }
+
+  async saveInsuranceBonus(companyId: string, userId: string, targetDate: string, totalAmount: number, comAmount: number, userAmount: number, targetName: string){
+    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
+    const q = query(
+      employeeRef,
+      where('employeeId', '==', userId)
+    );
+    const userSnap = await getDocs(q);
+    const employeesId =userSnap.docs[0].id;
+
+    const bonusCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'bonus');
+    const bonusq = query(
+      bonusCollection,
+      where('date', '==', targetDate)
+    );
+    const bonusSnap = await getDocs(bonusq);
+    const bonusId = bonusSnap.docs[0].id;
+
+    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'bonus', bonusId, 'shakaihoken');
+    const shakaihokenDoc = doc(shakaihokenCollectionRef, targetName);
+    await setDoc(shakaihokenDoc,{
+      totalAmount: totalAmount,
+      comAmount: comAmount,
+      userAmount: userAmount,
+      createdAt: new Date()
+    });
+
 
   }
 }
