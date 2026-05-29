@@ -114,7 +114,7 @@ export class SalaryComponent implements OnInit {
       await this.salaryData.updatePensionMonthAvg(this.currentCompanyId, this.currentUserId, this.monthPayroll.pensionMonthAvg);
     }
 
-    await this.salaryData.saveSalaryData(this.currentCompanyId, this.currentUserId, {
+    await this.salaryData.saveSalaryData(this.currentCompanyId, this.currentUserId,this.monthPayroll.targetMonth, {
       ...this.monthPayroll
     });
 

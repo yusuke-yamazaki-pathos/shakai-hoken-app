@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, doc, collection, updateDoc, addDoc, query, where, getDocs} from '@angular/fire/firestore';
+import { Firestore, doc, collection, updateDoc, setDoc, query, where, getDocs} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -8,78 +8,32 @@ export class SalarydataService {
 
   private firestore = inject(Firestore);
 
-  async saveSalaryData(companyId: string, userId: string, salaryData: any ){
-    const employeeCollection = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(employeeCollection, where('employeeId', '==', userId));
-    const querySnapshot = await getDocs(q);
+  async saveSalaryData(companyId: string, userId: string, targetMonth: string, salaryData: any ){
+    
+    const salaryDocRef = doc(this.firestore, 'company', companyId, 'employees', userId, 'salary',targetMonth);
 
-    const employeeId = querySnapshot.docs[0].id;
-
-    const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', employeeId, 'salary');
-
-    addDoc(salaryCollection,{
+    await setDoc(salaryDocRef,{
       ...salaryData,
       createdAt: new Date()
     })
   }
 
-  async calculateMonthAvg(companyId: string, userId: string){
-
-    const employeeCollection = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeCollection,
-      where('employeeId','==',userId)
-    );
-
-    const userSnap = await getDocs(q);
-
-    if(!userSnap.empty){
-      const docRef = userSnap.docs[0].ref;
-
-      const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', docRef.id, 'salaly');
-
-      const salarySnap = await getDocs(salaryCollection);
-
-      salaryData: [] = [];
-
-
-
-    }
-
-  }
 
   async updateHealthMonthAvg(companyId: string, userId: string, monthAvg: number){
-    const userDocRef = collection(this.firestore, 'company', companyId,'employees');
-    const q = query(
-      userDocRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    if(!userSnap.empty){
-      const docRef = userSnap.docs[0].ref;
-
-      const employeeDoc = doc(this.firestore, 'company', companyId, 'employees', docRef.id);
-      await updateDoc(employeeDoc,{
-        healthMonthAvg: monthAvg
-      });
-    }
+    const userDocRef = doc(this.firestore, 'company', companyId,'employees', userId);
+   
+    await updateDoc(userDocRef,{
+      healthMonthAvg: monthAvg
+    });
   }
 
   async updatePensionMonthAvg(companyId: string, userId: string, monthAvg: number){
-    const userDocRef = collection(this.firestore, 'company', companyId,'employees');
-    const q = query(
-      userDocRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    if(!userSnap.empty){
-      const docRef = userSnap.docs[0].ref;
 
-      const employeeDoc = doc(this.firestore, 'company', companyId, 'employees', docRef.id);
-      await updateDoc(employeeDoc,{
-        pensionMonthAvg: monthAvg
-      });
-    }
+    const employeeDoc = doc(this.firestore, 'company', companyId, 'employees', userId);
+    await updateDoc(employeeDoc,{
+      pensionMonthAvg: monthAvg
+    });
+    
   }
 
    

@@ -1,0 +1,89 @@
+// 変数定義（カラーシステム）
+$color-primary: #3b82f6;      // アクセントブルー
+$color-bg: #f8fafc;           // 全体背景
+$color-surface: #ffffff;      // コンテナ背景
+$color-text-main: #1e293b;    // メイン文字
+$color-text-muted: #64748b;   // 補助文字
+$color-border: #cbd5e1;       // ボーダー
+$color-focus: #93c5fd;        // フォーカス時シャドウ
+
+// コンテナ全体のスタイル
+.bonus-containar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 400px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background-color: $color-surface;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+// 入力項目のグループ化
+.bonus-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: $color-text-main;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  // ラベルのデザイン
+  label {
+    color: $color-text-muted;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  // 金額入力部分の「円」の並び調整
+  &:has(input[type="number"]) {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 0.5rem;
+
+    // グリッド配置でラベルを最上部に横断させる
+    label {
+      grid-column: 1 / -1;
+    }
+
+    // 「円」のテキスト
+    font-weight: 600;
+    color: $color-text-main;
+  }
+}
+
+// インプット共通のデザイン
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: $color-text-main;
+  background-color: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+
+  // プレースホルダーの文字色
+  &::placeholder {
+    color: #94a3b8;
+  }
+
+  // ホバー時の挙動
+  &:hover {
+    border-color: darken($color-border, 10%);
+  }
+
+  // フォーカス（選択中）の挙動
+  &:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px $color-focus;
+    background-color: $color-surface;
+  }
+}

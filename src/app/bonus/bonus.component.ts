@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CalculateShakaihokenService } from '../service/calculate-shakaihoken.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface bonus {
   date: string;
@@ -13,13 +15,14 @@ interface bonus {
 @Component({
   selector: 'app-bonus',
   standalone: true,
-  imports: [],
+  imports: [ RouterLink , CommonModule, FormsModule],
   templateUrl: './bonus.component.html',
   styleUrl: './bonus.component.scss'
 })
 export class BonusComponent implements OnInit {
 
   private calShakaihoken = inject(CalculateShakaihokenService);
+  private router = inject(Router);
 
 
   currentUserId : string = "";
@@ -27,6 +30,7 @@ export class BonusComponent implements OnInit {
   userData: any = null;
   inputBonusAmount: number | null = null;
   inputDate: string = "";
+
 
   bonus: bonus = {
     date: "",
@@ -55,12 +59,15 @@ export class BonusComponent implements OnInit {
   async saveBonus(){
 
     const standardBonusAmount = Math.floor(this.inputBonusAmount! / 1000) * 1000;
+    const cleanDate = this.inputDate.replace(/-/g, '');
 
-    this.bonus.date = this.inputDate;
+    this.bonus.date = cleanDate;
     this.bonus.amount = this.inputBonusAmount!;
     this.bonus.standardBonus = standardBonusAmount;
 
-    this.calShakaihoken.saveBonus(this.currentCompanyId, this.currentUserId, this.bonus);
+    await this.calShakaihoken.saveBonus(this.currentCompanyId, this.currentUserId, cleanDate, this.bonus);
+
+    this.router.navigate(['/admin-page']);
     
   }
   

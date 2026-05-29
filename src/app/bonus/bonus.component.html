@@ -1,1 +1,17 @@
-<p>bonus works!</p>
+<div class="bonus-containar">
+
+    <div class="bonus-group">
+        <label>支給日</label>
+        <input type="date" [(ngModel)]="inputDate" placeholder="2026-07-01">
+    </div>
+
+    <div class="bonus-group">
+        <label>支給金額</label>
+        <input type="number" [(ngModel)]="inputBonusAmount" placeholder="1000000">円
+    </div>
+
+    <div class="bonus-group">
+        <button class="save-btn" (click)="saveBonus()">保存</button>
+    </div>
+
+</div>

@@ -117,7 +117,7 @@ export class InputEmployeeComponent  implements OnInit {
     try{
       
       this.inputPass = this.inputId;
-      await this.companyService.saveEmployees(currentCompanyId,{
+      await this.companyService.saveEmployees(currentCompanyId,this.inputId,{
 
         name: this.inputName,
         age: this.inputAge,

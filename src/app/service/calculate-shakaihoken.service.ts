@@ -116,7 +116,7 @@ export class CalculateShakaihokenService {
     const companySnap =  await getDoc(companyDoc);
     if(companySnap.exists()){
       const companyData = companySnap.data();
-      return companyData['healthcomRate'];
+      return companyData['healthComRate'];
     }
   }
 
@@ -130,25 +130,9 @@ export class CalculateShakaihokenService {
   }
 
   async saveHealthInsurance(companyId: string, userId: string, targetMonth: string, companyHealthInsurance: number, userhealthInsurance: number, totalHealthInsurance: number ){
-    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    const employeesId =userSnap.docs[0].id;
-
-    const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary');
-    const salaryq = query(
-      salaryCollection,
-      where('targetMonth', '==', targetMonth)
-    );
-    const salarySnap = await getDocs(salaryq);
-    const salaryId = salarySnap.docs[0].id;
-
-    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary', salaryId, 'shakaihoken');
-    const healthDoc = doc(shakaihokenCollectionRef, 'health');
-    await setDoc(healthDoc,{
+    
+    const healthDocRef = doc(this.firestore, 'company', companyId, 'employees', userId, 'salary',targetMonth,'shakaihoken', 'health');
+    await setDoc(healthDocRef,{
       companyCost: companyHealthInsurance,
       userCost: userhealthInsurance,
       totalCost: totalHealthInsurance,
@@ -158,25 +142,9 @@ export class CalculateShakaihokenService {
   }
 
   async savePensionWage(companyId: string, userId: string, targetMonth: string, companyPensionWage: number, userPensionWage: number, totalPensionWage: number ){
-    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    const employeesId =userSnap.docs[0].id;
-
-    const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary');
-    const salaryq = query(
-      salaryCollection,
-      where('targetMonth', '==', targetMonth)
-    );
-    const salarySnap = await getDocs(salaryq);
-    const salaryId = salarySnap.docs[0].id;
-
-    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary', salaryId, 'shakaihoken');
-    const pensionDoc = doc(shakaihokenCollectionRef, 'pension');
-    await setDoc(pensionDoc,{
+    
+    const pensionDocRef = doc(this.firestore, 'company', companyId, 'employees', userId, 'salary', targetMonth, 'shakaihoken','pension');
+    await setDoc(pensionDocRef,{
       companyCost: companyPensionWage,
       userCost: userPensionWage,
       totalCost: totalPensionWage,
@@ -186,25 +154,9 @@ export class CalculateShakaihokenService {
   }
 
   async saveCareInsurance(companyId: string, userId: string, targetMonth: string, companyCare: number, userCare: number, totalCare: number ){
-    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    const employeesId =userSnap.docs[0].id;
-
-    const salaryCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary');
-    const salaryq = query(
-      salaryCollection,
-      where('targetMonth', '==', targetMonth)
-    );
-    const salarySnap = await getDocs(salaryq);
-    const salaryId = salarySnap.docs[0].id;
-
-    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'salary', salaryId, 'shakaihoken');
-    const pensionDoc = doc(shakaihokenCollectionRef, 'care');
-    await setDoc(pensionDoc,{
+    
+    const pensionDocRef = doc(this.firestore, 'company', companyId, 'employees', userId, 'salary', targetMonth, 'shakaihoken', 'care');
+    await setDoc(pensionDocRef,{
       companyCost: companyCare,
       userCost: userCare,
       totalCost: totalCare,
@@ -229,56 +181,94 @@ export class CalculateShakaihokenService {
 
   }
 
-  async saveBonus(companyId: string, userId: string, bonusData: any){
+  async saveBonus(companyId: string, userId: string, date: string, bonusData: any){
 
-    const employeeCollection = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeCollection,
-      where('employeeId', '==', userId)
-    );
+    let standardBonusAmount = bonusData.standardBonus;
 
-    const employeeSnap = await getDocs(q);
-    const employeeData = employeeSnap.docs[0].data();
-    const birthDate = employeeData['birthDay'];
+    const employeeDocRef = doc(this.firestore, 'company', companyId, 'employees',userId);
+    const employeeSnap = await getDoc(employeeDocRef);
+    const employeeData = employeeSnap.data();
+    const birthDate = employeeData?.['birthDay'];
+    const employeeId = userId;
+
+    await this.createBonusCollection(companyId, employeeId);
+    const bonusSummaryData = await this.getBonusCount(companyId, employeeId);
+    let bonusCount = bonusSummaryData?.['bonusCount']  || 0;
+    let bonusTotalAmount = bonusSummaryData?.['bonusTotalAmount'] || 0;
+
+    const employeeBonusDocRef = doc(this.firestore, 'company', companyId, 'employees',employeeId,'bonus',date);
+    const bonusRef = await setDoc(employeeBonusDocRef,{
+      ...bonusData,
+      createdAt: new Date()
+    });
+
+    bonusCount += 1;
+    bonusTotalAmount += bonusData?.['amount'];
+    if(bonusTotalAmount > 5730000){
+      standardBonusAmount = 5730000-(bonusTotalAmount - bonusData.amount);
+
+      if(standardBonusAmount < 0)standardBonusAmount = 0;
+    }
+
+
+    await this.updateSummary(companyId, employeeId, bonusCount, bonusTotalAmount);
+
+
+
+
+
+    const bonusId = date;
+
 
 
     let isTarget: boolean = false;
 
+    if(bonusCount < 4 && standardBonusAmount !== 0){
 
-    const healthRate = await this.getHealthRate(companyId); // 料率
-    const pensionRate = await this.getPensionRate(companyId);
+      
+      const healthRate = await this.getHealthRate(companyId); // 料率
+      const pensionRate = await this.getPensionRate(companyId);
     
-    const healthComRate = await this.getHealthComRate(companyId); //会社負担割合
-    const pensionComRate = 0.5;
+      const healthComRate = await this.getHealthComRate(companyId); //会社負担割合
+      const pensionComRate = 0.5;
 
-    const standardBonusAmount = bonusData.standardBonus;
+      const standardPensionAmount = Math.min(standardBonusAmount, 1500000);
     
 
-    const [ totalHealthInsurance, healthComInsurance, healthUserInsurance ] = await this.calInsurance( standardBonusAmount, healthRate, healthComRate );
-    const [ totalPensionWage, pensionComWage, pensionUserWage ] = await this.calInsurance(standardBonusAmount, pensionRate, pensionComRate);
+      const [ totalHealthInsurance, healthComInsurance, healthUserInsurance ] = await this.calInsurance( standardBonusAmount, healthRate, healthComRate );
+      const  [ totalPensionWage, pensionComWage, pensionUserWage ] = await this.calInsurance(standardPensionAmount, pensionRate, pensionComRate);
 
-    await this.saveInsuranceBonus(companyId, userId, bonusData.date, totalHealthInsurance, healthComInsurance, healthUserInsurance, 'health');
-    await this.saveInsuranceBonus(companyId, userId, bonusData.date, totalPensionWage, pensionComWage, pensionUserWage, 'pension');
+
+      await this.saveInsuranceBonus(companyId, employeeId, bonusId, totalHealthInsurance, healthComInsurance, healthUserInsurance, 'health');
+      await this.saveInsuranceBonus(companyId, employeeId, bonusId, totalPensionWage, pensionComWage, pensionUserWage, 'pension');
     
    
     
-    isTarget = await this.isKaigohoken(birthDate);
-    if(isTarget){
-      const careRate = await this.getCareRate(companyId);
-      const careComRate = await this.getCareComRate(companyId);
+      isTarget = await this.isKaigohoken(birthDate);
+      if(isTarget){
+        const careRate = await this.getCareRate(companyId);
+        const careComRate = await this.getCareComRate(companyId);
 
-      const [ totalCareAmount, careComAmount, careUserAmount ] = await this.calInsurance(standardBonusAmount, careRate, careComRate);
-      await this.saveInsuranceBonus(companyId, userId, bonusData.date,totalCareAmount, careComAmount, careUserAmount,'care');
+        const [ totalCareAmount, careComAmount, careUserAmount ] = await this.calInsurance(standardBonusAmount, careRate, careComRate);
+        await this.saveInsuranceBonus(companyId, employeeId, bonusId,totalCareAmount, careComAmount, careUserAmount,'care');
 
+      }
     }
 
+    else {
+      await this.saveInsuranceBonus(companyId, employeeId, bonusId, 0, 0, 0, 'health');
+      await this.saveInsuranceBonus(companyId, employeeId, bonusId, 0, 0, 0,'pension');
+      if(isTarget){
+        await this.saveInsuranceBonus(companyId, employeeId, bonusId, 0, 0, 0,'care');
+      }
 
-    
+      if(bonusCount >= 4){
 
+        await this.saveNewMonthAvg(companyId,employeeId,bonusTotalAmount,date);
 
+      }
 
-
-
+    }
   }
 
   async calInsurance(standardAmount: number, rate: number, ratio: number){
@@ -295,24 +285,9 @@ export class CalculateShakaihokenService {
 
   }
 
-  async saveInsuranceBonus(companyId: string, userId: string, targetDate: string, totalAmount: number, comAmount: number, userAmount: number, targetName: string){
-    const employeeRef = collection(this.firestore, 'company', companyId, 'employees');
-    const q = query(
-      employeeRef,
-      where('employeeId', '==', userId)
-    );
-    const userSnap = await getDocs(q);
-    const employeesId =userSnap.docs[0].id;
+  async saveInsuranceBonus(companyId: string, employeeId: string, bonusId: string, totalAmount: number, comAmount: number, userAmount: number, targetName: string){
 
-    const bonusCollection = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'bonus');
-    const bonusq = query(
-      bonusCollection,
-      where('date', '==', targetDate)
-    );
-    const bonusSnap = await getDocs(bonusq);
-    const bonusId = bonusSnap.docs[0].id;
-
-    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeesId, 'bonus', bonusId, 'shakaihoken');
+    const shakaihokenCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeeId, 'bonus', bonusId, 'shakaihoken');
     const shakaihokenDoc = doc(shakaihokenCollectionRef, targetName);
     await setDoc(shakaihokenDoc,{
       totalAmount: totalAmount,
@@ -322,5 +297,75 @@ export class CalculateShakaihokenService {
     });
 
 
+  }
+
+  async createBonusCollection(companyId: string, employeeId: string){
+    const bonusCollectionRef = collection(this.firestore, 'company', companyId, 'employees', employeeId, 'bonus');
+    const bonusSnap = await getDocs(bonusCollectionRef);
+    if(bonusSnap.empty){
+      const summaryDocRef = doc(bonusCollectionRef, 'summary');
+      await setDoc(summaryDocRef,{
+        bonusCount: 0,
+        bonusTotalAmount:0,
+        updatedAt: new Date()
+      });
+    }
+  }
+
+  async getBonusCount(companyId: string, employeeId: string){
+    const summaryDocRef = doc(this.firestore, 'company', companyId, 'employees', employeeId, 'bonus', 'summary');
+    const summarySnap = await getDoc(summaryDocRef);
+    return summarySnap.data();
+  }
+
+  async updateSummary(companyId: string, employeeId: string, bonusCount: number, bonusTotal: number){
+    const summaryDocRef = doc(this.firestore, 'company',companyId, 'employees', employeeId, 'bonus','summary');
+    await setDoc(summaryDocRef,{
+      bonusCount: bonusCount,
+      bonusTotalAmount: bonusTotal,
+      createdAt: new Date()
+    }),{merge: true};
+  }
+
+  async saveNewMonthAvg(companyId: string, employeeId: string, bonusTotalAmount: number, date: string){
+    const employeeDocRef = doc(this.firestore, 'company', companyId, 'employees', employeeId);
+    const employeeSnap = await getDoc(employeeDocRef);
+    if(employeeSnap.exists()){
+      const employeeData =employeeSnap.data();
+      const healthMonthAvg = employeeData?.['healthMonthAvg'];
+      const pensionMonthAvg = employeeData?.['pensionMonthAvg'];
+
+      const addMonthAvg = Math.floor(bonusTotalAmount / 12);
+      const gethealthMonthAvg = healthMonthAvg + addMonthAvg;
+      const newHealthMonthAvg = await this.getMonthAvg(gethealthMonthAvg);
+      const getPensionAvg = pensionMonthAvg + addMonthAvg;
+      const newPensionMonthAvg = await this.getPensionMonthAvg(getPensionAvg);
+      const changeYearMonth = await this.calculateYearMonth(date)
+
+
+      const companyCollectionRef = collection(this.firestore, 'company', companyId, 'changeReservation');
+      await addDoc(companyCollectionRef,{
+        employeeId: employeeId,
+        changeYearMonth: changeYearMonth,
+        newHealthMonthAvg: newHealthMonthAvg,
+        newPensionMonthAvg: newPensionMonthAvg,
+        isActive: true,
+        type: "monthAvg-change",
+        createdAt: new Date()
+      });
+    }
+  }
+
+  async calculateYearMonth(date: string){
+    const year = parseInt(date.substring(0,4),10);
+    const month = parseInt(date.substring(4,6),10);
+
+    const targetDate = new Date(year,month - 1,1);
+    targetDate.setMonth(targetDate.getMonth() + 4);
+
+    const nextYear = targetDate.getFullYear();
+    const nextMonth = String(targetDate.getMonth() + 1).padStart(2,'0');
+
+    return `${nextYear}${nextMonth}`;
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, doc, getDoc, query, where, getDocs, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, getDoc, query, where, getDocs, updateDoc, setDoc } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -32,14 +32,14 @@ export class CompanyService {
     return docRef;
   }
 
-  async saveEmployees(companyId: any, employeeData: any): Promise<any>{
+  async saveEmployees(companyId: any, employeeId: string, employeeData: any): Promise<any>{
 
     if(employeeData.dependentCount && employeeData.dependentCount === 0){
       delete employeeData.dependents;
     }
 
-    const employeesCollection = collection(this.firestore, `company`, companyId, `employees`);
-    const docRef = await addDoc(employeesCollection,{
+    const employeeDocRef = doc(this.firestore, `company`, companyId, `employees`, employeeId);
+    const docRef = await setDoc(employeeDocRef,{
       ...employeeData,
       createdAt: new Date()
     });
@@ -80,4 +80,6 @@ export class CompanyService {
    }
 
   }
+
+  
 }
